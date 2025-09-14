@@ -1,0 +1,25 @@
+version: 0.0
+os: linux
+
+# CodeDeploy will copy files from the GitHub repo to these locations on the EC2 instance
+files:
+  - source: /              # Copies all files from the repo
+    destination: /home/ec2-user/my-node-app # Target directory on the EC2 instance
+
+# Hooks define the commands to run at each stage of the deployment lifecycle
+hooks:
+  ApplicationStop:
+    - location: scripts/application_stop.sh
+      timeout: 300
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 300
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
+  ApplicationStart:
+    - location: scripts/application_start.sh
+      timeout: 300
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 300
