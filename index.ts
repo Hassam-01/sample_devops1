@@ -1,13 +1,26 @@
-const fastify = require("fastify")({ logger: true });
-const puppeteer = require("puppeteer");
+import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+const fastify = Fastify({ logger: true });
 
-const fs = require("fs");
-
-fastify.get("/", async (_request, _reply) => {
-  return { hello: "world" };
+fastify.get("/", async (_request: FastifyRequest, _reply: FastifyReply) => {
+  return {};
 });
+export function sum(): FastifyInstance {
+  const app = Fastify({ logger: true });
 
-const start = async () => {
+  app.get("/sum/:id", async (request: FastifyRequest, reply: FastifyReply) => {
+    const a = Number((request.params as any).id);
+    const b = a - 2;
+    if (isNaN(a) || isNaN(b)) {
+      reply.code(400).send({ error: "Invalid" });
+      return;
+    }
+
+    return { sum: a + b };
+  });
+
+  return app;
+}
+const start = asyn () => {
   try {
     await fastify.listen({ port: 3010 });
     console.log("server running on 3010");

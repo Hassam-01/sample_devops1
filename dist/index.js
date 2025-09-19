@@ -43,44 +43,13 @@ fastify.get("/", function (_request, _reply) { return __awaiter(_this, void 0, v
         return [2 /*return*/, { hello: "world" }];
     });
 }); });
-(function () { return __awaiter(_this, void 0, void 0, function () {
-    var browser, page, html;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, puppeteer.launch()];
-            case 1:
-                browser = _a.sent();
-                return [4 /*yield*/, browser.newPage()];
-            case 2:
-                page = _a.sent();
-                html = "\n    <!DOCTYPE html>\n    <html>\n        <head>\n            <title>Sample PDF</title>\n            <style>\n                body { font-family: Arial, sans-serif; margin: 40px; }\n                h1 { color: #007acc; }\n            </style>\n        </head>\n        <body>\n            <h1>Hello, PDF!</h1>\n            <p>This is a sample HTML content for PDF generation using Puppeteer.</p>\n        </body>\n    </html>\n";
-                // Load HTML from a file or string
-                //   const html = fs.readFileSync('input.html', 'utf8');
-                return [4 /*yield*/, page.setContent(html)];
-            case 3:
-                // Load HTML from a file or string
-                //   const html = fs.readFileSync('input.html', 'utf8');
-                _a.sent();
-                // Generate PDF
-                return [4 /*yield*/, page.pdf({ path: "output.pdf", format: "A4" })];
-            case 4:
-                // Generate PDF
-                _a.sent();
-                return [4 /*yield*/, browser.close()];
-            case 5:
-                _a.sent();
-                console.log("PDF generated!");
-                return [2 /*return*/];
-        }
-    });
-}); })();
 var start = function () { return __awaiter(_this, void 0, void 0, function () {
     var err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, fastify.listen({ port: 3010, host: "0.0.0.0" })];
+                return [4 /*yield*/, fastify.listen({ port: 3010 })];
             case 1:
                 _a.sent();
                 console.log("server running on 3010");
