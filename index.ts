@@ -20,7 +20,7 @@ export function sum(): FastifyInstance {
 
   return app;
 }
-const start = asyn () => {
+const start = async () => {
   try {
     await fastify.listen({ port: 3010 });
     console.log("server running on 3010");
