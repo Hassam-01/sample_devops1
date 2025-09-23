@@ -1,0 +1,77 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: fetch-source
+spec:
+  workspaces:
+    - name: source
+      description: the git repo wil be cloned in this worksapce
+  params:
+    - name: url
+      type: string
+    - name: revision
+      type: string
+      default: "main"
+  steps:
+    - name: clone
+      image: alpine/git
+      script: |
+        git clone $(params.url) /workspace/source
+        cd /workspace/source
+        git checkout $(params.revision)
+
+---
+
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: npm-install
+spec:
+  workspaces:
+    - name: source
+  steps:
+    - name: install-dependencies
+      image: node:18-alpine
+      workingDir: /workspace/source
+      script: |
+        npm ci
+
+---
+
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test
+spec: 
+  workspaces:
+    - name: source
+  steps:
+    - name: test
+      image: node:18-alpine
+      workingDir: /workspace/source
+      script: |
+        npm test
+
+---
+
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-image
+spec:
+  params:
+    - name: image
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: build
+      image: gcr.io/kaniko-project/executor:v1.9.0
+      env:
+        - name: DOCKER_CONFIG
+          value: /kaniko/.docker
+      args:
+        - --dockerfile=/workspace/source/Dockerfile
+        - --context=/workspace/source
+        - --destination=$(params.image)
+        - --verbosity=info
