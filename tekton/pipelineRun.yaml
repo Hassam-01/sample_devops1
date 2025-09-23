@@ -5,6 +5,8 @@ metadata:
 spec:
   pipelineRef:
     name: nodejs-app-pipeline
+  taskRunTemplate:
+    serviceAccountName: pipeline-sa
   workspaces:
     - name: shared-workspace
       volumeClaimTemplate:
@@ -21,3 +23,5 @@ spec:
       value: main
     - name: image
       value: docker.io/hassamali404/sample_devops1:latest
+
+      
