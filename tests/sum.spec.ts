@@ -3,8 +3,9 @@ import { sum } from "..";
 describe("GET /sum/:id", () => {
   let app = sum();
 
-  afterAll((done) => app.close(done));
-
+ afterAll(async () => {
+    await app.close(); 
+  });
   it("return teh sum of two numbers", async () => {
     const res = await app.inject({
       method: "GET",
