@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: nodejs-app-pipeline-run-001  # Kubernetes will append unique ID
+spec:
+  pipelineRef:
+    name: nodejs-app-pipeline
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+  params:
+    - name: git-url
+      value: https://github.com/hassam-01/sample_devops1.git
+    - name: git-revision
+      value: main
+    - name: image
+      value: docker.io/hassamali404/sample_devops1:latest
