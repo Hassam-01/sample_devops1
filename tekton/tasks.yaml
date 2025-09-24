@@ -14,7 +14,7 @@ spec:
       default: "main"
   steps:
     - name: clone
-      image: alpine/git
+      image: bitnami/git:latest
       script: |
         git clone $(params.url) /workspace/source
         cd /workspace/source
