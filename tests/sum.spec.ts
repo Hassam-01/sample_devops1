@@ -1,12 +1,19 @@
+import { FastifyInstance } from "fastify";
 import { sum } from "..";
 
 describe("GET /sum/:id", () => {
-  let app = sum();
+  let app: FastifyInstance;
 
- afterAll(async () => {
-    await app.close(); 
+  beforeAll(async () => {
+    app = sum(); // Create app instance
+    await app.ready(); // Wait for Fastify to be ready
   });
-  it("return teh sum of two numbers", async () => {
+
+  afterAll(async () => {
+    await app.close(); // Properly close the server
+  });
+
+  it("return the sum of two numbers", async () => {
     const res = await app.inject({
       method: "GET",
       url: "/sum/18",
@@ -16,10 +23,10 @@ describe("GET /sum/:id", () => {
     expect(res.json()).toEqual({ sum: 18 + (18 - 2) });
   });
 
-  it("returns invalid on digits ", async () => {
+  it("returns invalid on digits", async () => {
     const res = await app.inject({
       method: "GET",
-      url: "sum/abc",
+      url: "/sum/abc", // Fixed: added leading slash
     });
 
     expect(res.statusCode).toBe(400);

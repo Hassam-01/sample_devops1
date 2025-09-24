@@ -1,9 +1,12 @@
 import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+
+// Create the main fastify instance for production
 const fastify = Fastify({ logger: true });
 
 fastify.get("/", async (_request: FastifyRequest, _reply: FastifyReply) => {
   return {};
 });
+
 export function sum(): FastifyInstance {
   const app = Fastify({ logger: true });
 
@@ -14,20 +17,22 @@ export function sum(): FastifyInstance {
       reply.code(400).send({ error: "Invalid" });
       return;
     }
-
     return { sum: a + b };
   });
 
   return app;
 }
-const start = async () => {
-  try {
-    await fastify.listen({ port: 3010 });
-    console.log("server running on 3010");
-  } catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-};
 
-start();
+// Only start the server if this file is run directly (not when imported)
+if (require.main === module) {
+  const start = async () => {
+    try {
+      await fastify.listen({ port: 3010 });
+      console.log("server running on 3010");
+    } catch (err) {
+      fastify.log.error(err);
+      process.exit(1);
+    }
+  };
+  start();
+}
