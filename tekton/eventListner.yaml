@@ -1,22 +1,12 @@
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: nodejs-app-listener
+  name: nodejs-app-eventlistener
 spec:
-  serviceAccountName: tekton-trigger-sa
+  serviceAccountName: tekton-triggers-sa
   triggers:
-    - name: nodejs-app-trigger
-      interceptors:
-        - ref:
-            name: "github"
-          params:
-            - name: "secretRef"
-              value:
-                secretName: github-secret
-                secretKey: secretToken
-            - name: "eventTypes"
-              value: ["push"]
-      bindings:
-        - ref: pipeline-binding
+    - name: nodejs-app-triggers
+      bindings: 
+        - ref: nodejs-app-triggerbinding
       template:
-        ref: pipeline-template
+        ref: nodejs-app-triggertemplate 

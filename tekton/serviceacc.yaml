@@ -3,4 +3,4 @@ kind: ServiceAccount
 metadata:
   name: pipeline-sa
 secrets:
-  - name: docker-credentials
+  - name: docker-registry-secret

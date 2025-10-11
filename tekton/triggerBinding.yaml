@@ -1,0 +1,12 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: nodejs-app-triggerbinding
+spec:
+  params:
+    - name: git-url
+      value: $(body.repository.url)
+    - name: git-revision
+      value: $(body.ref)
+    - name: image
+      value: "docker.io/hassamali404/sample_devops1:$(body.head_commit.id)"

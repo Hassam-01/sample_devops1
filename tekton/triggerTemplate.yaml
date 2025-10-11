@@ -1,0 +1,40 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: nodejs-app-triggertemplate
+spec:
+  params:
+    - name: git-url
+      description: Git repository URL
+      default: "https://github.com/hassam-01/sample_devops1.git"
+    - name: git-revision
+      description: Git revision (branch, tag, or commit)
+      default: "main"
+    - name: image
+      description: Docker image to build
+      default: "docker.io/hassamali404/sample_devops1:latest"
+  resourceTemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: nodejs-app-pipelinerun-
+      spec:
+        pipelineRef:
+          name: nodejs-app-pipeline
+        serviceAccountName: tekton-docker-sa
+        workspaces:
+          - name: shared-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+        params:
+          - name: git-url
+            value: $(tt.params.git-url)
+          - name: git-revision
+            value: $(tt.params.git-revision)
+          - name: image
+            value: $(tt.params.image)  
